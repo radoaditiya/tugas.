@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tugas kelompok</title>
+
+<style>
+
+  h3{
+  margin-top:15px;
+  color:#05fa2a;
+}
+
+ul{
+  margin-left:20px;
+  line-height:1.6;
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+  background:#010000;
+  overflow-x:hidden;
+  color:white;
+}
+
+
+
+/* tombol */
+button{
+    padding:12px 25px;
+    font-size:24px;
+    border:none;
+    border-radius:8px;
+    background:#02fb17;
+    color:rgb(7, 7, 7);
+    cursor:pointer;
+}
+
+/* BACKGROUND POPUP */
+.popup{
+    position: fixed;
+    top: 70px; /* tepat di bawah navbar */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+
+    padding: 15px;
+    background: rgba(0,0,0,.85);
+
+    display: none;
+    justify-content: center;
+    align-items: flex-start; /* pindah ke atas */
+}
+
+/* ISI POPUP */
+.popup-content{
+    position:relative;
+    z-index:99999;
+
+    width:min(95vw,1400px);
+    height:min(90vh,900px);
+
+    background:#fff;
+    border-radius:20px;
+
+    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+
+    box-shadow:0 0 40px rgba(0,255,0,.4);
+
+    animation:muncul .35s ease;
+}
+
+/* iframe penuh */
+.popup-content iframe{
+    flex:1;
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+/* tombol close */
+.close{
+    position:absolute;
+
+    top:15px;
+    right:20px;
+
+    z-index:10;
+
+    width:40px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#02fb17;
+
+    color:black;
+
+    cursor:pointer;
+}
+
+@media (max-width:768px){
+  .popup-content{
+    width:100%;
+    height:85vh;
+    border-radius:12px;
+  }
+
+  .close{
+    width:35px;
+    height:35px;
+    font-size:18px;
+  }
+}
+
+/* animasi */
+@keyframes muncul{
+    from{
+        transform:scale(0.7);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+/* LOADER */
+#loader{
+  position:fixed;
+  width:100%;
+  height:100vh;
+  background:#0f2027;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loader-circle{
+  width:80px;
+  height:80px;
+  border:6px solid #030303;
+  border-top:6px solid #f3f5f3;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+/* PARTICLE BACKGROUND */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* HEADER */
+header{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+header h1{
+  font-size:45px;
+}
+
+.cursor{
+  display:inline-block;
+  width:3px;
+  background:rgb(242, 243, 242);
+  animation:blink 0.8s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0;}
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:15px;
+  backdrop-filter:blur(10px);
+  background:rgb(6, 0, 0);
+  text-align:center;
+  z-index:1000;
+}
+
+nav a{
+  margin:0 15px;
+  color:rgb(3, 255, 61);
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:#f6f7f2;
+}
+
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:15px;
+  backdrop-filter:blur(10px);
+  background:rgb(6, 0, 0);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  z-index:1000;
+}
+
+.nav-zoom{
+  display:flex;
+  gap:10px;
+  margin-left:20px;
+}
+
+.nav-zoom button{
+  width:40px;
+  height:40px;
+  font-size:20px;
+  padding:0;
+}
+
+/* SECTION */
+section{
+  padding:100px 10%;
+  opacity:0;
+  transform:translateY(80px);
+  transition:1s;
+}
+
+section.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* GLASS CARD */
+.card{
+  background:rgba(6, 6, 6, 0.95);
+  backdrop-filter:blur(15px);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 40px rgba(11, 252, 2, 0.5);
+  margin-bottom:30px;
+  transition:0.5s;
+  transform-style:preserve-3d;
+}
+
+.card:hover{
+  transform:rotateY(8deg) rotateX(5deg) scale(1.05);
+}
+
+/* CODE */
+pre{
+  background:#0b0b0b;
+  padding:20px;
+  border-radius:15px;
+  overflow-x:auto;
+  color:#fafafa;
+}
+
+.gambar-container{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  align-items:center;
+}
+
+.gambar-container img{
+  width:300px;
+  border-radius:10px;
+}
+
+.gambar-wrapper{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  position:relative;
+}
+
+.gambar-wrapper img{
+  width:300px;
+  border-radius:10px;
+  transition:transform 0.3s ease;
+  position:relative;
+  z-index:1;
+}
+.gambar-wrapper img.active{
+  outline:3px solid #02fb17;
+  box-shadow:0 0 20px #02fb17;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+  <div class="loader-circle"></div>
+</div>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <a href="#sourecode-full">sourecode-full</a>
+  <a href="#penjelasan">penjelasan</a>
+  <a href="#gambar">gambar</a>
+
+  <div class="nav-zoom">
+    <button onclick="zoomIn()">+</button>
+    <button onclick="zoomOut()">−</button>
+    <button onclick="resetZoom()">⟳</button>
+  </div>
+</nav>
+
+<header>
+  <h1 id="typing"></h1><span class="cursor"></span>
+  <h2>kelompok 10</h2>
+  </h2>
+  <p>Nama: Rado Aditiya (251410012)</p> 
+  <p>Nama: wegi asez jaya putra (251410007)</p>
+</header>
+
+<section id="sourecode-full">
+  <div class="card">
+    <h2>sourecode-full</h2>
+    <button onclick="bukaApp('popup1')">Run Code</button>
+    <div id="popup1" class="popup">
+  <div class="popup-content">
+    <span class="close" onclick="tutupApp('popup1')">✖</span>
+
+    <iframe src="https://dartpad.dev/embed-inline.html?id=78834068452df58e373b8ea3b7b837ef&run=true"
+   width="100%"
+     loading="lazy">
+    </iframe>
+  </div>
+</div>
+    <pre><code>
+// Class abstrak Pembayaran
+abstract class Pembayaran {
+  void prosesPembayaran();
+}
+
+// Class TransferBank (Inheritance)
+class TransferBank extends Pembayaran {
+  String namaBank;
+
+  TransferBank(this.namaBank);
+
+  @override
+  void prosesPembayaran() {
+    print("\n=== PEMBAYARAN ===");
+    print("Pembayaran melalui $namaBank berhasil.");
+  }
+}
+
+// Class Penumpang
+class Penumpang {
+  int id;
+  String nama;
+  String nik;
+
+  Penumpang(this.id, this.nama, this.nik);
+
+  void tampilInfo() {
+    print("ID        : $id");
+    print("Nama      : $nama");
+    print("NIK       : $nik");
+  }
+}
+
+// Class Kereta
+class Kereta {
+  String kodeKereta;
+  String namaKereta;
+  int kapasitas;
+
+  Kereta(this.kodeKereta, this.namaKereta, this.kapasitas);
+}
+
+// Class Gerbong
+class Gerbong {
+  int nomorGerbong;
+  int kapasitas;
+
+  Gerbong(this.nomorGerbong, this.kapasitas);
+}
+
+// Class Jadwal
+class Jadwal {
+  String asal;
+  String tujuan;
+  String tanggal;
+  String jam;
+
+  Jadwal(this.asal, this.tujuan, this.tanggal, this.jam);
+}
+
+// Class Tiket
+class Tiket {
+  String nomorTiket;
+  double harga;
+  Kereta kereta;
+  Gerbong gerbong;
+  Jadwal jadwal;
+
+  Tiket(
+    this.nomorTiket,
+    this.harga,
+    this.kereta,
+    this.gerbong,
+    this.jadwal,
+  );
+
+  void tampilTiket() {
+    print("Nomor Tiket : $nomorTiket");
+    print("Kereta      : ${kereta.namaKereta}");
+    print("Gerbong     : ${gerbong.nomorGerbong}");
+    print("Rute        : ${jadwal.asal} - ${jadwal.tujuan}");
+    print("Harga       : Rp$harga");
+  }
+}
+
+// Class Pemesanan
+class Pemesanan {
+  String kodePemesanan;
+  Penumpang penumpang;
+  Tiket tiket;
+
+  Pemesanan(this.kodePemesanan, this.penumpang, this.tiket);
+
+  void tampilPemesanan() {
+    print("\n=== DETAIL PEMESANAN ===");
+    print("Kode Pemesanan : $kodePemesanan");
+    print("Nama Penumpang : ${penumpang.nama}");
+    print("Nomor Tiket    : ${tiket.nomorTiket}");
+    print("Kereta         : ${tiket.kereta.namaKereta}");
+    print("Gerbong        : ${tiket.gerbong.nomorGerbong}");
+    print("Rute           : ${tiket.jadwal.asal} - ${tiket.jadwal.tujuan}");
+    print("Tanggal        : ${tiket.jadwal.tanggal}");
+    print("Jam            : ${tiket.jadwal.jam}");
+    print("Total Harga    : Rp${tiket.harga}");
+  }
+}
+
+void main() {
+  // Data kereta
+  Kereta kereta = Kereta("KA001", "Sriwijaya Express", 500);
+
+  // Data gerbong
+  Gerbong gerbong1 = Gerbong(1, 10);
+  Gerbong gerbong2 = Gerbong(2, 5);
+
+  // Data jadwal
+  Jadwal jadwal =
+      Jadwal("Palembang", "Lampung", "20-06-2026", "08:00");
+
+  // List pemesanan
+  List<Pemesanan> daftarPemesanan = [];
+
+  // 10 penumpang di gerbong 1
+  for (int i = 1; i <= 10; i++) {
+    Penumpang penumpang =
+        Penumpang(i, "Penumpang $i", "167101010101000$i");
+
+    Tiket tiket =
+        Tiket("TKT00$i", 150000, kereta, gerbong1, jadwal);
+
+    daftarPemesanan.add(
+        Pemesanan("ORD00$i", penumpang, tiket));
+  }
+
+  // 5 penumpang di gerbong 2
+  for (int i = 11; i <= 15; i++) {
+    Penumpang penumpang =
+        Penumpang(i, "Penumpang $i", "167101010101000$i");
+
+    Tiket tiket =
+        Tiket("TKT00$i", 150000, kereta, gerbong2, jadwal);
+
+    daftarPemesanan.add(
+        Pemesanan("ORD00$i", penumpang, tiket));
+  }
+
+  // Tampilkan pemesanan + pembayaran per penumpang
+  for (var pemesanan in daftarPemesanan) {
+    pemesanan.tampilPemesanan();
+
+    TransferBank pembayaran = TransferBank("BRI");
+    pembayaran.prosesPembayaran();
+  }
+}
+</code></pre>
+</section>
+
+<section id="penjelasan">
+  <div class="card">
+    <h2>Class Penumpang</h2>
+    <div>Class ini digunakan untuk menyimpan data penumpang.</div>
+    <h2>Atribut:</h2>
+    <p>id (int): id penumpang </p>
+    <p>nama (string): nama penumpang</p>
+    <p>nik (string): nomor identitas</p>
+    <h2>Method</h2>
+    <p>tampilkan(): menampilkan data penumpang</p>
+    <p>contoh data:</p>
+    <pre><code>
+ID : 1
+Nama : Penumpang 1
+NIK : 1671010101010001
+</code></pre>
+</div>
+</div>
+</section>
+
+<section id="penjelasan1">
+  <div class="card">
+    <h2>Class Kereta</h2>
+    <div>class ini menyimpan informasi kereta.</div>
+    <h2>Atribut:</h2>
+    <p>kode kereta (string) </p>
+    <p>namakereta (string)</p>
+    <p>kapasitas (string):</p>
+    <h2>Method</h2>
+    <p>tampilkankereta(): menampilkan data kereta</p>
+    <p>contohnya:</p>
+    <pre><code>
+KA001
+Sriwijaya Express
+500
+</code></pre>
+ </div>
+</div>
+</section>
+
+<section id="penjelasan2">
+  <div class="card">
+    <h2>Class gerbong</h2>
+    <div>Class ini digunakan untuk membedakan gerbong kereta.</div>
+    <h2>Atribut:</h2>
+    <p>nomor gerbong </p>
+    <p>kapasitas (string):</p>
+    <p>tujuan nya agar penumpang bisa di bagi sesuai gerbong</p>
+ </div>
+</div>
+</section>
+
+<section id="penjelasan3">
+  <div class="card">
+    <h2>Class jadwal</h2>
+    <div>class ini menyimpan jadwal perjalanan kereta.</div>
+    <h2>Atribut:</h2>
+    <p>asal (string) </p>
+    <p>tujuan (string)</p>
+    <p>tanggal (string)</p>
+    <p>jam (string)</p>
+    <h2>Method</h2>
+    <p>tampilkanjadwal(): menampilkan jadwal</p>
+    <p>contohnya:</p>
+    <pre><code>
+Palembang → Lampung
+20-06-2026
+08:00
+</code></pre>
+</div>
+</div>
+</section>
+
+<section id="penjelasan4">
+  <div class="card">
+    <h2>Class tiket</h2>
+    <div>class ini menyimpan data tiket</div>
+    <h2>Atribut:</h2>
+    <p>nomortiket (string) </p>
+    <p>harga (double)</p>
+    <p>kereta (kereta)</p>
+    <p>gerbong</p>
+    <p>jadwal(jadwal)</p>
+    <h2>Method</h2>
+    <p>tampilkantiket(): menampilkan tiket</p>
+    <p>contohnya:</p>
+    <pre><code>
+TKT001
+Rp150000
+Gerbong 1
+</code></pre>
+ </div>
+</div>
+</section>
+
+<section id="penjelasan5">
+  <div class="card">
+    <h2>Class pemesanan</h2>
+    <div>Class ini menyimpan data transaksi pemesanan.</div>
+    <h2>Atribut:</h2>
+    <p>kodepemesanan (string) </p>
+    <p>penumpang (penumpang)</p>
+    <p>tiket (tiket)</p>
+    <div></div>
+    <p>artinya satu pemesan terdiri dari satu penumpang satu tiket. </p>
+    <h2>Method</h2>
+    <p>tampilkanpemesanan(): menampilkan detail pemesanan</p>
+ 
+  </div>
+</div>
+</section>
+
+<section id="penjelasan6">
+  <div class="card">
+    <h2>Class pembayaran</h2>
+     <pre><code>
+abstract class Pembayaran {
+  void prosesPembayaran();
+}
+</code></pre>
+    <div>Class ini adalah class abstrak, artinya class ini hanya sebagai kerangka dasar untuk sistem pembayaran.</div>
+    <h2>Atribut:</h2>
+    <p>tidak ada</p>
+    <h2>Method</h2>
+    <p>Method ini belum memiliki isi karena nanti akan diimplementasikan oleh class turunannya.</p>
+  </div>
+</div>
+</section>
+
+<section id="penjelasan7">
+  <div class="card">
+    <h2>Class transferbank</h2>
+    <div>Class ini merupakan turunan dari class Pembayaran.</div>
+    <h2>Atribut:</h2>
+    <p>namabank (string)</p>
+    <h2>Method</h2>
+    <p>Method ini digunakan untuk menampilkan proses pembayaran menggunakan bank.
+
+Contoh:</p>
+    <pre><code>
+Pembayaran melalui BRI berhasil
+</code></pre>
+ </div>
+</div>
+</section>
+
+<section id="gambar">
+  <div class="card">
+    <h2>flowchart</h2>
+   <div class="gambar-wrapper">
+  <img id="img1" src="./flowchart.jpg" onclick="setActiveImage('img1')">
+</div>
+</section>
+<section id="flowchart-diagram class">
+  <div class="card">
+    <h2>pseudocode</h2>
+   <div class="gambar-wrapper">
+  <img id="img2" src="./pseucode.jpg" onclick="setActiveImage('img2')">
+</div>
+</section>
+<section id="flowchart-diagram-class">
+  <div class="card">
+    <h2> diagram-class</h2>
+    <div class="gambar-wrapper">
+  <img id="img3" src="./diagram-class.jpg" onclick="setActiveImage('img3')">
+</div>
+</section> 
+<footer>
+  &copy; 2026 Tugas OOP Dart
+</footer>
+
+
+
+<script>
+// LOADER
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("loader").style.display = "none";
+});
+
+// TYPING EFFECT
+const text="sistem pemesanan tiket kereta api";
+let i=0;
+function typing(){
+  if(i<text.length){
+    document.getElementById("typing").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typing,50);
+  }
+}
+typing();
+
+// SCROLL REVEAL
+window.addEventListener("scroll",()=>{
+  document.querySelectorAll("section").forEach(sec=>{
+    if(sec.getBoundingClientRect().top < window.innerHeight-100){
+      sec.classList.add("show");
+    }
+  });
+});
+
+
+
+// PARTICLE BACKGROUND
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<30;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*3+1,
+    dx:Math.random()-0.5,
+    dy:Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#00ff00";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.x+=p.dx;
+    p.y+=p.dy;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener("resize", ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+function bukaApp(id){
+  console.log("Popup dibuka:", id);
+  document.getElementById(id).style.display="flex";
+}
+
+function tutupApp(id){
+document.getElementById(id).style.display="none";
+}
+
+window.onclick = function(event) {
+  document.querySelectorAll(".popup").forEach(popup=>{
+    if(event.target == popup){
+      popup.style.display="none";
+    }
+  });
+}
+
+let activeImage = "img1";
+
+let zoomLevels = {
+  img1: 1,
+  img2: 1,
+  img3: 1
+};
+
+const images = document.querySelectorAll(".gambar-wrapper img");
+
+// auto pilih gambar saat scroll
+window.addEventListener("scroll", () => {
+  let closest = null;
+  let minDistance = Infinity;
+
+  images.forEach(img => {
+    const rect = img.getBoundingClientRect();
+    const distance = Math.abs(rect.top - window.innerHeight / 2);
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closest = img;
+    }
+  });
+
+  if (closest) {
+    document.querySelectorAll(".gambar-wrapper img").forEach(img => {
+      img.classList.remove("active");
+    });
+
+    activeImage = closest.id;
+    closest.classList.add("active");
+  }
+});
+
+// update zoom
+function applyZoom() {
+  document.getElementById(activeImage).style.transform =
+    `scale(${zoomLevels[activeImage]})`;
+}
+
+// tombol navbar
+function zoomIn() {
+  zoomLevels[activeImage] += 0.2;
+  applyZoom();
+}
+
+function zoomOut() {
+  if (zoomLevels[activeImage] > 0.4) {
+    zoomLevels[activeImage] -= 0.2;
+    applyZoom();
+  }
+}
+
+function resetZoom() {
+  zoomLevels[activeImage] = 1;
+  applyZoom();
+}
+</script>
+
+</body>
+</html>
